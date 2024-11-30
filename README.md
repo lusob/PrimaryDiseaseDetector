@@ -1,5 +1,7 @@
 # Primary Disease Detector
 
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/lusob/PrimaryDiseaseDetector/blob/main/PrimaryDiseaseDetector.ipynb)
+
 This repository provides a TensorFlow-based pipeline for cancer classification using gene expression data from TCGA and MET500 datasets.
 
 ## Features
@@ -41,7 +43,8 @@ This repository provides a TensorFlow-based pipeline for cancer classification u
 
 ### 2. Install dependencies
 
-To install the required dependencies, run:    ```bash
+To install the required dependencies, run:
+    ```bash
     pip install -r requirements.txt
     ```
 
