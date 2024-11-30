@@ -2,14 +2,15 @@
 
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/lusob/PrimaryDiseaseDetector/blob/main/PrimaryDiseaseDetector.ipynb)
 
-This repository provides a TensorFlow-based pipeline for cancer classification using gene expression data from TCGA and MET500 datasets.
+This repository provides a TensorFlow-based pipeline for cancer primary disease classification using gene expression data from TCGA and MET500 datasets.
 
 ## Features
 
-- Downloads large datasets and phenotypes directly from Google Drive (if training is required).
+- Downloads and preprocess large datasets and phenotypes.
 - Supports training a new model or using an existing pretrained model.
 - Evaluates performance on the MET500 dataset using accuracy, classification reports, and confusion matrices.
 - Converts gene expression data into image-like inputs for convolutional neural networks (CNNs).
+- Grad-CAM Implementation: Generates heatmaps to highlight the most important genes or regions of image that contributed to the model’s predictions.
 
 ## Repository Structure
 
@@ -30,6 +31,26 @@ This repository provides a TensorFlow-based pipeline for cancer classification u
   - sklearn
   - tqdm
   - gdown
+
+## Dataset Preprocessing
+
+The [TCGA](https://drive.google.com/file/d/1-6OA1Q0TqFeooVHmURcZ_F9YjRh9D2cK/view?usp=drive_link) and [MET500](https://drive.google.com/file/d/1nBzGFuq-ExWw0KC0dtagJqAOFjji8bQc/view?usp=drive_link) datasets provided in Google Drive have been preprocessed as follows:
+
+1. **Sources:**
+   - The original TCGA and MET500 datasets were downloaded from:
+     - **TCGA Gene Expression Data**: [Download](https://toil-xena-hub.s3.us-east-1.amazonaws.com/download/tcga_RSEM_gene_fpkm.gz)
+     - **MET500 Gene Expression Data**: [Download](https://ucsc-public-main-xena-hub.s3.us-east-1.amazonaws.com/download/MET500%2FgeneExpression%2FM.mx.log2.txt.gz)
+
+2. **Steps:**
+   - The datasets were intersected to include only common genes.
+   - Both datasets were filtered to retain the intersected genes.
+   - The data was saved as `log2(FPKM + 0.001)` values.
+
+3. **Details:**
+   - See the "Preprocessing Data" section in the notebook (`PrimaryDiseaseDetector.ipynb`) for the code used to generate these files.
+
+4. **Download:**
+   - The preprocessed datasets were uploaded to Google Drive and can be downloaded dynamically during notebook execution if `RETRAIN_MODEL=True`.
 
 ## Usage
 
@@ -77,7 +98,7 @@ The notebook generates:
 
 - Model training and validation metrics.
 - Accuracy, classification reports, and confusion matrices for the MET500 dataset.
-- Visualizations of results.
+- Interactive visualizations of predictions over heatmaps created with grad-cam technique.
 
 ## Contributing
 
