@@ -1,0 +1,9 @@
+- numpy
+- pandas
+- tensorflow
+- matplotlib
+- seaborn
+- sklearn
+- tqdm
+- requests
+- gdown
