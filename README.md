@@ -2,7 +2,15 @@
 
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/lusob/PrimaryDiseaseDetector/blob/main/PrimaryDiseaseDetector.ipynb)
 
-This repository provides a TensorFlow-based pipeline for cancer primary disease classification using gene expression data from TCGA and MET500 datasets.
+This repository provides a TensorFlow-based pipeline for classifying the primary disease in cancer of unknown primary (CUP) cases using gene expression data from TCGA and MET500 datasets.
+
+Additionally, there is a visualization tool (GenesScanner) that generates a heatmap superimposed on the input image, representing gene expression data of 20,000 genes. This provides insights into how the model interprets the data for each prediction. These visualizations are particularly valuable not only for understanding the underlying biology in CUP classification but also for guiding personalized treatments in patients with any type of tumor, helping identify critical genes or gene combinations involved in specific predictions.
+
+Unlike traditional machine learning models, which extract the most important features generically across all predictions, this approach leverages Grad-CAM visualization to highlight gene-specific contributions for each individual sample. This offers a unique capability to identify the most influential genes (or gene combinations) used by the model in predicting the disease for a specific sample.
+
+**Why MET500 as a Test Set?**
+
+MET500 was selected as the test set because it includes samples where the biopsy tissue is different from the tissue of origin. This subset better mimics the characteristics of CUP cases, making MET500 a more suitable dataset for evaluating the model’s performance in such challenging scenarios.
 
 ## Features
 
@@ -10,7 +18,7 @@ This repository provides a TensorFlow-based pipeline for cancer primary disease 
 - Supports training a new model or using an existing pretrained model.
 - Evaluates performance on the MET500 dataset using accuracy, classification reports, and confusion matrices.
 - Converts gene expression data into image-like inputs for convolutional neural networks (CNNs).
-- Grad-CAM Implementation: Generates heatmaps to highlight the most important genes or regions of image that contributed to the model’s predictions.
+- GeneScanner (Grad-CAM): Generates heatmaps to highlight the most important genes or regions of the image that contributed to the model’s predictions, specific to each individual sample.
 
 ## Repository Structure
 
@@ -37,20 +45,19 @@ This repository provides a TensorFlow-based pipeline for cancer primary disease 
 The [TCGA](https://drive.google.com/file/d/1-6OA1Q0TqFeooVHmURcZ_F9YjRh9D2cK/view?usp=drive_link) and [MET500](https://drive.google.com/file/d/1nBzGFuq-ExWw0KC0dtagJqAOFjji8bQc/view?usp=drive_link) datasets provided in Google Drive have been preprocessed as follows:
 
 1. **Sources:**
-   - The original TCGA and MET500 datasets were downloaded from:
-     - **TCGA Gene Expression Data**: [Download](https://toil-xena-hub.s3.us-east-1.amazonaws.com/download/tcga_RSEM_gene_fpkm.gz)
-     - **MET500 Gene Expression Data**: [Download](https://ucsc-public-main-xena-hub.s3.us-east-1.amazonaws.com/download/MET500%2FgeneExpression%2FM.mx.log2.txt.gz)
+   - The original TCGA and MET500 datasets, both `log2(FPKM + 0.001)` normalized, were downloaded from:
+     - **TCGA Gene Expression Data**: [Download](https://xenabrowser.net/datapages/?dataset=tcga_RSEM_gene_fpkm&host=https%3A%2F%2Ftoil.xenahubs.net&removeHub=https%3A%2F%2Fxena.treehouse.gi.ucsc.edu%3A443)
+     - **MET500 Gene Expression Data**: [Download](https://xenabrowser.net/datapages/?dataset=MET500%2FgeneExpression%2FM.mx.log2.txt&host=https%3A%2F%2Fucscpublic.xenahubs.net&addHub=https%3A%2F%2Ftcga.xenahubs.net%3A44&removeHub=https%3A%2F%2Fxena.treehouse.gi.ucsc.edu%3A443)
 
 2. **Steps:**
    - The datasets were intersected to include only common genes.
    - Both datasets were filtered to retain the intersected genes.
-   - The data was saved as `log2(FPKM + 0.001)` values.
 
 3. **Details:**
-   - See the "Preprocessing Data" section in the notebook (`PrimaryDiseaseDetector.ipynb`) for the code used to generate these files.
+   - See the "Data Preprocessing" section in the notebook (`PrimaryDiseaseDetector.ipynb`) for the code used to generate these files.
 
 4. **Download:**
-   - The preprocessed datasets were uploaded to Google Drive and can be downloaded dynamically during notebook execution if `RETRAIN_MODEL=True`.
+   - The preprocessed datasets were uploaded to Google Drive and are automatically downloaded during notebook execution if `RETRAIN_MODEL=True`.
 
 ## Usage
 
@@ -98,12 +105,4 @@ The notebook generates:
 
 - Model training and validation metrics.
 - Accuracy, classification reports, and confusion matrices for the MET500 dataset.
-- Interactive visualizations of predictions over heatmaps created with grad-cam technique.
-
-## Contributing
-
-Feel free to fork this repository and submit pull requests for improvements.
-
-## License
-
-This project is licensed under the MIT License. See `LICENSE` for details.
+- **Interactive Grad-CAM visualizations** of predictions, showing heatmaps of the most important genes for each sample.
