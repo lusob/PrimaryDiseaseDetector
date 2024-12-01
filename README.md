@@ -8,6 +8,8 @@ Additionally, there is a visualization tool (GenesScanner) that generates a heat
 
 Unlike traditional machine learning models, which extract the most important features generically across all predictions, this approach leverages Grad-CAM visualization to highlight gene-specific contributions for each individual sample. This offers a unique capability to identify the most influential genes (or gene combinations) used by the model in predicting the disease for a specific sample.
 
+<img src="gene_scanner.png" alt="Gene Scanner" style="max-width: 100%; width: 600px;"/>
+
 **Why MET500 as a Test Set?**
 
 MET500 was selected as the test set because it includes samples where the biopsy tissue is different from the tissue of origin. This subset better mimics the characteristics of CUP cases, making MET500 a more suitable dataset for evaluating the model’s performance in such challenging scenarios.
