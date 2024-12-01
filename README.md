@@ -61,6 +61,74 @@ The [TCGA](https://drive.google.com/file/d/1-6OA1Q0TqFeooVHmURcZ_F9YjRh9D2cK/vie
 4. **Download:**
    - The preprocessed datasets were uploaded to Google Drive and are automatically downloaded during notebook execution if `RETRAIN_MODEL=True`.
 
+## Pretrained Model: PrimaryDiseaseDetectorModel
+
+The pretrained model `PrimaryDiseaseDetectorModel.keras` is a convolutional neural network (CNN) designed for the classification of primary diseases in cancer cases, including Cancer of Unknown Primary (CUP). This model has been trained on the TCGA dataset and evaluated on the MET500 dataset, achieving robust performance across multiple cancer types.
+
+### Performance Highlights:
+- **Accuracy on MET500 Test Set**: 81.2%
+- **Macro Average Metrics**:
+  - Precision: 0.77
+  - Recall: 0.80
+  - F1-Score: 0.76
+- **Weighted Average Metrics**:
+  - Precision: 0.86
+  - Recall: 0.81
+  - F1-Score: 0.82
+
+The evaluation includes eight cancer types from MET500, each represented by varying numbers of samples. These metrics highlight the model's ability to generalize across different cancers, with particularly strong performance in **Breast Cancer**, **Prostate Cancer**, and **Sarcoma**.
+
+### Confusion Matrix:
+The confusion matrix below illustrates the model's predictions for each cancer type in the MET500 test set. It provides insights into how well the model distinguishes between similar or overlapping classes.
+
+<img src="confusion_matrix_image.png" alt="Confusion Matrix Heatmap" style="max-width: 100%; width: 600px;"/>
+
+- **True Labels (Y-Axis)**: The actual cancer type.
+- **Predicted Labels (X-Axis)**: The model's predictions.
+- **Color Intensity**: Represents the number of samples classified in each category.
+
+### Threshold-Based Evaluation with 'UNKNOWN' Category
+
+The notebook incorporates a confidence threshold mechanism that categorizes predictions as 'UNKNOWN' when the model's confidence score is below a certain threshold (default: `0.8`). This functionality introduces a safeguard for low-confidence predictions, providing:
+
+- **Improved Interpretability**: Ensures predictions with insufficient confidence are flagged as 'UNKNOWN', rather than misclassified.
+- **Detailed Metrics**:
+  - Adjusted classification report, including metrics for the 'UNKNOWN' category.
+  - An updated confusion matrix with predictions and true labels, including 'UNKNOWN'.
+
+<img src="confusion_matrix_image_with_unknown_cat.png" alt="Confusion Matrix Heatmap With Unknown Category" style="max-width: 100%; width: 600px;"/>
+
+This mechanism is especially valuable in clinical and research settings, where uncertain predictions should be flagged for further analysis.
+
+### Important Considerations for Clinical Application:
+While the pretrained model demonstrates promising performance, **it is essential to validate the model on additional independent cohorts** before deploying it in clinical settings. This would ensure the robustness and generalizability of the model to different datasets and patient populations. 
+
+For validation:
+1. **Normalization of New Cohorts**:
+   - Any new cohort must be normalized in the same way as TCGA and MET500 to ensure compatibility with the model. Specifically:
+     - Expression data should be processed as `log2(FPKM + 0.001)`.
+     - The resulting images must match the same dimensions and structure used during training (e.g., reshaped into square matrices with appropriate padding).
+   - This ensures that the input images generated for the new cohort are consistent with those used to train the model.
+
+2. **Testing on CUP Cohorts**:
+   - Validate the model on a cohort of CUP (Cancer of Unknown Primary) cases to assess its ability to predict tumor origin in real-world clinical scenarios.
+
+3. **Further Cohorts**:
+   - Additional cohorts representing diverse populations and cancer types should be included to account for potential biological and technical variability.
+
+### Use Cases for the Pretrained Model:
+1. **Evaluation of MET500 Samples**:
+   - Directly use the pretrained model to predict the primary disease for new or existing MET500 samples.
+2. **Baseline for Comparisons**:
+   - Provides a strong baseline for further research, allowing comparisons with other methods like Random Forest or custom models.
+3. **Potential Clinical Utility**:
+   - If validated on additional cohorts, the model could assist in identifying the likely primary site for CUP cases and guide treatment decisions.
+
+### How to Use:
+1. The pretrained model is automatically loaded when `RETRAIN_MODEL=False` in the notebook.
+2. No additional training is required; the model is ready for inference on the MET500 test set or other compatible datasets.
+
+This pretrained model demonstrates the potential of CNNs in classifying primary cancers based on gene expression data. However, further validation on independent cohorts is a critical step before clinical deployment to ensure reliability and reproducibility.
 ## Usage
 
 ### 1. Clone the repository
@@ -107,4 +175,46 @@ The notebook generates:
 
 - Model training and validation metrics.
 - Accuracy, classification reports, and confusion matrices for the MET500 dataset.
-- **Interactive Grad-CAM visualizations** of predictions, showing heatmaps of the most important genes for each sample.
+- **Adjusted metrics with an 'UNKNOWN' category** for predictions with low confidence.
+- **GeneScanner (Interactive Grad-CAM visualizations)** of predictions, showing heatmaps of the most important genes for each sample.
+
+## GeneScanner: Interactive Visualization Tool
+
+**GeneScanner** is an experimental visualization tool integrated into the `PrimaryDiseaseDetector` notebook. It aims to provide interactive Grad-CAM visualizations, allowing users to explore which genes (or combinations of genes) are most influential in the model’s predictions for individual samples. While promising, its practical utility in research and clinical applications remains to be fully validated.
+
+### Key Features:
+- **Interactive Sample Selection**: Search and select specific samples from the MET500 dataset using an intuitive interface.
+- **Individualized Insights**: Highlights the gene-specific contributions used by the model for each sample, offering sample-specific interpretability.
+- **Detailed Visualizations**:
+  - Displays the original gene expression input image.
+  - Generates a Grad-CAM heatmap showing activation levels of the most relevant genes.
+  - Superimposes the heatmap on the input image for an intuitive understanding.
+
+### How It Works:
+1. Navigate to the **GeneScanner** cell in the `PrimaryDiseaseDetector.ipynb` notebook.
+2. Run the cell to initialize the tool.
+3. Select a sample from the MET500 dataset using the interactive search box.
+4. Click the "Generate Heatmap" button to:
+   - View the original input image (gene expression matrix as an image).
+   - Generate a Grad-CAM heatmap highlighting important genes.
+   - Visualize the heatmap superimposed on the input image.
+
+### Demonstration:
+Below is a demonstration of how GeneScanner works:
+
+![GeneScanner in Action](path/to/your/gif.gif)
+
+### Intended Purpose and Limitations:
+GeneScanner is designed to enhance the interpretability of the model by visually linking predictions to specific gene activations. However:
+- Its **utility in research and clinical applications has not yet been fully validated**.
+- The tool is **experimental**, and its outputs should be interpreted with caution until further studies confirm its reliability and relevance.
+
+### Use Cases:
+- **Cancer of Unknown Primary (CUP)**:
+  - Identify the genes contributing to the model's classification of the primary disease.
+- **General Tumor Analysis**:
+  - Understand critical gene patterns across various tumor types.
+- **Research and Clinical Applications**:
+  - Support personalized treatment decisions by highlighting influential genes for individual patients.
+
+**GeneScanner** bridges the gap between AI-driven predictions and their real-world interpretability, with potential applications in both research and clinical settings once validated.
