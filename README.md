@@ -202,7 +202,8 @@ The notebook generates:
 ### Demonstration:
 Below is a demonstration of how GeneScanner works:
 
-![GeneScanner in Action](path/to/your/gif.gif)
+<img src="GeneScanner.gif" alt="GeneScanner in Action" style="max-width: 100%; width: 600px;"/>
+
 
 ### Intended Purpose and Limitations:
 GeneScanner is designed to enhance the interpretability of the model by visually linking predictions to specific gene activations. However:
