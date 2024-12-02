@@ -1,2 +1,0 @@
-data/tcga_gene_expression_log2_common_genes.csv filter=lfs diff=lfs merge=lfs -text
-data/met500_gene_expression_common_genes.csv filter=lfs diff=lfs merge=lfs -text
