@@ -4,7 +4,7 @@
 
 This repository provides a TensorFlow-based pipeline for classifying the primary disease in cancer of unknown primary (CUP) cases using gene expression data from TCGA and MET500 datasets.
 
-Additionally, there is a visualization tool (GenesScanner) that generates a heatmap superimposed on the input image, representing gene expression data of 20,000 genes. This provides insights into how the model interprets the data for each prediction. These visualizations are particularly valuable not only for understanding the underlying biology in CUP classification but also for guiding personalized treatments in patients with any type of tumor, helping identify critical genes or gene combinations involved in specific predictions.
+Additionally, there is a visualization tool (GenesScanner) that generates a heatmap superimposed on the input image, represented as a genes expression data matrix. This provides insights into how the model interprets the data for each prediction. These visualizations are particularly valuable not only for understanding the underlying biology in CUP classification but also for guiding personalized treatments in patients with any type of tumor, helping identify critical genes or gene combinations involved in specific predictions.
 
 Unlike traditional machine learning models, which extract the most important features generically across all predictions, this approach leverages Grad-CAM visualization to highlight gene-specific contributions for each individual sample. This offers a unique capability to identify the most influential genes (or gene combinations) used by the model in predicting the disease for a specific sample.
 
@@ -61,7 +61,7 @@ The [TCGA](https://drive.google.com/file/d/1-6OA1Q0TqFeooVHmURcZ_F9YjRh9D2cK/vie
 4. **Download:**
    - The preprocessed datasets were uploaded to Google Drive and are automatically downloaded during notebook execution if `RETRAIN_MODEL=True`.
 
-## Pretrained Model: PrimaryDiseaseDetectorModel
+## Pretrained Model:
 
 The pretrained model `PrimaryDiseaseDetectorModel.keras` is a convolutional neural network (CNN) designed for the classification of primary diseases in cancer cases, including Cancer of Unknown Primary (CUP). This model has been trained on the TCGA dataset and evaluated on the MET500 dataset, achieving robust performance across multiple cancer types.
 
@@ -76,7 +76,7 @@ The pretrained model `PrimaryDiseaseDetectorModel.keras` is a convolutional neur
   - Recall: 0.81
   - F1-Score: 0.82
 
-The evaluation includes eight cancer types from MET500, each represented by varying numbers of samples. These metrics highlight the model's ability to generalize across different cancers, with particularly strong performance in **Breast Cancer**, **Prostate Cancer**, and **Sarcoma**.
+The evaluation includes eight cancer types from MET500, each represented by varying numbers of samples. These metrics highlight the model's ability to generalize across different cancers, with particularly strong performance in some classes as **Breast Cancer**, **Lung Cancer** or **Sarcoma**.
 
 ### Confusion Matrix:
 The confusion matrix below illustrates the model's predictions for each cancer type in the MET500 test set. It provides insights into how well the model distinguishes between similar or overlapping classes.
@@ -87,18 +87,19 @@ The confusion matrix below illustrates the model's predictions for each cancer t
 - **Predicted Labels (X-Axis)**: The model's predictions.
 - **Color Intensity**: Represents the number of samples classified in each category.
 
-### Threshold-Based Evaluation with 'UNKNOWN' Category
+### Additional Evaluations
 
-The notebook incorporates a confidence threshold mechanism that categorizes predictions as 'UNKNOWN' when the model's confidence score is below a certain threshold (default: `0.8`). This functionality introduces a safeguard for low-confidence predictions, providing:
+The notebook includes two advanced evaluation scenarios for assessing the model's performance:
 
-- **Improved Interpretability**: Ensures predictions with insufficient confidence are flagged as 'UNKNOWN', rather than misclassified.
-- **Detailed Metrics**:
-  - Adjusted classification report, including metrics for the 'UNKNOWN' category.
-  - An updated confusion matrix with predictions and true labels, including 'UNKNOWN'.
+1. **Evaluation with an 'UNKNOWN' Category**:
+   - Predictions below a confidence threshold (e.g., 0.8) are categorized as `UNKNOWN`.
+   - Aimed at identifying cases where the model is uncertain about the primary cancer type.
 
-<img src="confusion_matrix_image_with_unknown_cat.png" alt="Confusion Matrix Heatmap With Unknown Category" style="max-width: 100%; width: 600px;"/>
+2. **Evaluation on a CUPS Test Set**:
+   - Focuses on samples where the `biopsy_tissue` differs from the expected `tissue`, simulating potential Cancer of Unknown Primary (CUPS) cases.
+   - Reports classification metrics and confusion matrices for these challenging scenarios.
 
-This mechanism is especially valuable in clinical and research settings, where uncertain predictions should be flagged for further analysis.
+For a detailed implementation and results, refer to the [notebook](PrimaryDiseaseDetector.ipynb).
 
 ### Important Considerations for Clinical Application:
 While the pretrained model demonstrates promising performance, **it is essential to validate the model on additional independent cohorts** before deploying it in clinical settings. This would ensure the robustness and generalizability of the model to different datasets and patient populations. 
@@ -210,7 +211,7 @@ GeneScanner is designed to enhance the interpretability of the model by visually
 - Its **utility in research and clinical applications has not yet been fully validated**.
 - The tool is **experimental**, and its outputs should be interpreted with caution until further studies confirm its reliability and relevance.
 
-### Use Cases:
+### Potential Use Cases:
 - **Cancer of Unknown Primary (CUP)**:
   - Identify the genes contributing to the model's classification of the primary disease.
 - **General Tumor Analysis**:
