@@ -8,7 +8,7 @@ Additionally, there is a visualization tool (GenesScanner) that generates a heat
 
 Unlike traditional machine learning models, which extract the most important features generically across all predictions, this approach leverages Grad-CAM visualization to highlight gene-specific contributions for each individual sample. This offers a unique capability to identify the most influential genes (or gene combinations) used by the model in predicting the disease for a specific sample.
 
-<img src="gene_scanner.png" alt="Gene Scanner" style="max-width: 100%; width: 600px;"/>
+<img src="images/gene_scanner.png" alt="Gene Scanner" style="max-width: 100%; width: 600px;"/>
 
 **Why MET500 as a Test Set?**
 
@@ -81,7 +81,7 @@ The evaluation includes eight cancer types from MET500, each represented by vary
 ### Confusion Matrix:
 The confusion matrix below illustrates the model's predictions for each cancer type in the MET500 test set. It provides insights into how well the model distinguishes between similar or overlapping classes.
 
-<img src="confusion_matrix_image.png" alt="Confusion Matrix Heatmap" style="max-width: 100%; width: 600px;"/>
+<img src="images/confusion_matrix_image.png" alt="Confusion Matrix Heatmap" style="max-width: 100%; width: 600px;"/>
 
 - **True Labels (Y-Axis)**: The actual cancer type.
 - **Predicted Labels (X-Axis)**: The model's predictions.
@@ -203,7 +203,7 @@ The notebook generates:
 ### Demonstration:
 Below is a demonstration of how GeneScanner works:
 
-<img src="GeneScanner.gif" alt="GeneScanner in Action" style="max-width: 100%; width: 600px;"/>
+<img src="images/GeneScanner.gif" alt="GeneScanner in Action" style="max-width: 100%; width: 600px;"/>
 
 
 ### Intended Purpose and Limitations:
