@@ -1,4 +1,5 @@
 # Primary Disease Detector
+![image](https://github.com/user-attachments/assets/9b9c126a-d7ad-46ae-9b2c-c15a2d76df91)
 
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/lusob/PrimaryDiseaseDetector/blob/main/PrimaryDiseaseDetector.ipynb)
 
